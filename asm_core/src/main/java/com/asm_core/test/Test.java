@@ -1,5 +1,7 @@
 package com.asm_core.test;
 
+import java.util.Date;
+
 import com.asm_core.GenSubProxy;
 import com.asm_core.logic.AddLogic;
 
@@ -17,7 +19,9 @@ public static void main(String[] args) {
 		
 		SayHello sh = (SayHello) obj;
 		
-		sh.sayHello("sdgf", "dfg", 22, new String[]{"sdfg"});
+		sh.hh((byte)1, new byte[]{}, 1, 1f, 's',1, 1, new int[][]{{12}}, "", new String[][]{{"sdf","s"}}, new Date());
+		
+		sh.sayHello("sg", "srt", 234, new String[]{});
 		
 	}
 

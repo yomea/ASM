@@ -11,7 +11,6 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -80,8 +79,6 @@ public class GenSubProxy {
 			MyClassLoader classLoader = new MyClassLoader(b);
 			
 			Class<?> proxy = classLoader.loadClass(classNamePrefix + "$Proxy");
-			
-			System.out.println(classNamePrefix + "$Proxy");
 			
 			obj = proxy.newInstance();
 			
@@ -197,11 +194,15 @@ public class GenSubProxy {
 //			System.err.println(DescInfo.getDescInfo(method));
 			
 			InsnList il = methodNode.instructions;
-			//获得这个方法的参数个数，不包括this
-			int len = method.getParameterTypes().length;
+			
 			//获得参数的类型
 			Class<?>[] clazz = method.getParameterTypes();
 			
+			//计算出参数会占用掉的本地变量表长度，long，double类型占用两个slot
+			int len = LocalLen.len(clazz);
+			//获得这个方法的参数个数，不包括this
+			int size = clazz.length;
+			//或的返回值类型
 			Class<?> rtClazz = method.getReturnType();
 			
 			il.clear();
@@ -230,22 +231,34 @@ public class GenSubProxy {
 			
 			il.add(new VarInsnNode(Opcodes.ASTORE, len + 2));//将栈顶的method存到局部变量表中
 			
-			//il.add(new LdcInsnNode(len));//将参数长度推到栈顶
-			il.add(new LdcInsnNode(len));
+			//将参数长度推到栈顶
+			il.add(new LdcInsnNode(size));
 			
 			il.add(new TypeInsnNode(Opcodes.ANEWARRAY, "java/lang/Object"));//new 出一个Object的数组
 			
 			il.add(new VarInsnNode(Opcodes.ASTORE, len + 3));//将数组存到本地变量表中
+			
+			int index = 1;
+			
 			//将参数值全都存到数组中
-			for(int i = 0; i < len; i++) {
+			for(int i = 0; i < size; i++) {
 				
 				il.add(new VarInsnNode(Opcodes.ALOAD, len + 3));//将数组推到栈顶
 				
 				il.add(new LdcInsnNode(i));//下标
 				
 				int opcode = OpcodeMap.getOpcodes(clazz[i].getName());//获得当前是什么类型的参数，使用什么样类型的指令
+				//如果是long，double类型的index加2
+				if(opcode == 22 || opcode == 24) {
+					
+					il.add(new VarInsnNode(opcode,index));//将long或者double参数推到栈顶
+					index += 2;
+				} else {
+					
+					il.add(new VarInsnNode(opcode, index));//将参数推到栈顶
+					index += 1;
+				}
 				
-				il.add(new VarInsnNode(opcode, i+1));//将参数推到栈顶
 				
 				if(AutoPKG.auto(clazz[i].getName()) != null) {
 					
@@ -289,7 +302,7 @@ public class GenSubProxy {
 			
 			methodNode.maxLocals = 5+len;
 			
-			methodNode.maxStack = 3;
+			methodNode.maxStack = 5;
 			
 			list.add(methodNode);
 			

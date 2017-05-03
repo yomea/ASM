@@ -1,5 +1,7 @@
 package com.asm_core.test;
 
+import java.util.Date;
+
 /**
  * 需要进行代理的类
  * @author Administrator
@@ -15,20 +17,31 @@ public class SayHello {
 	}
 	
 	private String l() {
-		
+		System.out.println("private String l() {");
 		return "";
 		
 	}
 	
-	public int[][] tt(int age) {
-		System.out.println("hi girl" + age);
+	public int[][] tt(int age, long l, double d) {
+		System.out.println("public int[][] tt(int age) {");
 		return new int[][]{};
 	}
 	
-	public String[][] hh(Integer age) {
-		
+	public String[][] hh(long k, double d, Double dd) {
+		System.out.println("public String[][] hh(long k, double d, Double dd) {");
 		return null;
 	}
+	
+	
+	public String[][] hh(short age, byte[] arg, int a, float f, char c, long l, double d, int[][] ii, String str, String[][] ss, Date date) {
+		System.out.println("public String[][] hh(short age, byte[] arg, int a, float f, char c, long l, double d, int[][] ii, String str, String[][] ss, Date date) {");
+		return null;
+	}
+	
+	/*public String[][] hh(Long l, Double d) {
+		System.out.println("public String[][] hh(short age, byte[] arg, double d) {");
+		return null;
+	}*/
 
 
 	

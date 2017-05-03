@@ -35,8 +35,6 @@ public class OpcodeRt {
 	
 	public static int getOpcodes(String type) {
 		
-		System.out.println(type);
-		
 		if(map.containsKey(type)) {
 			
 			return map.get(type);

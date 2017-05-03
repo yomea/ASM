@@ -21,9 +21,10 @@ public class AddLogicImpl implements AddLogic {
 
 	@Override
 	public Object addLogic(Method method, Object[] args) throws Exception {
+		
 		System.out.println("Hello");
 		Object obj = method.invoke(sayHello, args);//我们可以在调用目标方法的周围增加逻辑
-		System.out.print("baby");
+		System.out.println("baby");
 		return obj;
 	}
 

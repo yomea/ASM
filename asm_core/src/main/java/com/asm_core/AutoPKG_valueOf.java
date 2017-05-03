@@ -20,7 +20,7 @@ public class AutoPKG_valueOf {
 		
 		map.put("char", "(C)Ljava/lang/Character;");
 		
-		map.put("float", "(F)Ljava/lang/Float");
+		map.put("float", "(F)Ljava/lang/Float;");
 		
 		map.put("double", "(D)Ljava/lang/Double;");
 		

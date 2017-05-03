@@ -97,7 +97,6 @@ public class DescInfo {
 			
 		}
 		descInfo += ")" + rtStr;
-//System.out.println(descInfo);
 		return descInfo;
 		
 	}
