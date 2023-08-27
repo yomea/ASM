@@ -31,7 +31,11 @@ public class Test {
 		//也可以new TraceClassVisitor（new CheckClassAdapter），因为它们都是使用的聚合方式的静态代理
 		
 		cca.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, "Test", null, "java/lang/Number", null);
-		
+		//int access, String name, String desc,
+		//            String signature, Object value
+		cca.visitField(Opcodes.ACC_PRIVATE, "nameList", "Ljava/util/List;", null, null);
+		cca.visitField(Opcodes.ACC_PRIVATE, "ageList", "Ljava/util/List;", null, null);
+
 		cca.visitEnd();
 		
 		byte[] b = cw.toByteArray();
